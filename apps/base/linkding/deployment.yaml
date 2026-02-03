@@ -13,11 +13,20 @@ spec:
         app: linkding
   
     spec:
+      securityContext:
+        fsGroup: 33
+        runasUser: 33
+        runAsGroup: 33
+        runAsNonRoot: true
       containers:
         - name: linkding
           image: sissbruecker/linkding:1.31.0
           ports:
             - containerPort: 9090
+
+          securityContext:
+            allowPrivilageEscalation: false
+
           volumeMounts:
             - mountPath: /etc/linkding/data
               name: linkding-data
