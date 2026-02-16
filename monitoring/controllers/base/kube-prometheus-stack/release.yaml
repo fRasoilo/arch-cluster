@@ -35,4 +35,7 @@ spec:
         ingressClassName: traefik 
         hosts:
           - grafana.redvulpes.org
-        tls: []
+        tls:
+          - secretName: grafana-tls-secret
+            hosts:
+              - grafana.redvulpes.org
