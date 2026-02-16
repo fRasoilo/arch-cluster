@@ -29,3 +29,10 @@ spec:
   values:
     grafana:
       adminPassword: renato
+
+      ingress:
+        enabled: true 
+        ingressClassName: traefik 
+        hosts:
+          - grafana.redvulpes.org
+        tls: []
