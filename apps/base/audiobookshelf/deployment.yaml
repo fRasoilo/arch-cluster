@@ -13,6 +13,12 @@ spec:
         app: audiobookshelf 
   
     spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        allowPrivilageEscalation: false
       initContainers:
         - name: init-storage
           image: ghcr.io/advplyr/audiobookshelf:latest 
