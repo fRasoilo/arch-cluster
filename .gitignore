@@ -2,3 +2,5 @@
 .flux_tkn
 .renovate_tkn
 age.agekey
+tls.cert
+tls.key

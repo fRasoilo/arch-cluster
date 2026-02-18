@@ -13,12 +13,42 @@ spec:
         app: audiobookshelf 
   
     spec:
-      containers:
-        - name: audiobookshelf 
+      initContainers:
+        - name: init-storage
           image: ghcr.io/advplyr/audiobookshelf:latest 
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /mnt/audiobooks \
+                       /mnt/podcasts \
+                       /mnt/config \
+                       /mnt/metadata 
+          volumeMounts:
+            - name: audiobookshelf-data
+              mountPath: /mnt
+      containers:
+        - name: audiobookshelf
+          image: ghcr.io/advplyr/audiobookshelf:latest 
+          volumeMounts:
+            - name: audiobookshelf-data
+              mountPath: /audiobooks
+              subPath: audiobooks
+            - name: audiobookshelf-data
+              mountPath: /podcasts
+              subPath: podcasts
+            - name: audiobookshelf-data
+              mountPath: /config
+              subPath: config
+            - name: audiobookshelf-data
+              mountPath: /metadata
+              subPath: metadta
           envFrom:
             - configMapRef:
                 name: audiobookshelf-configmap
           ports:
             - containerPort: 3005 
-
+      volumes:
+        - name: audiobookshelf-data
+          persistentVolumeClaim:
+            claimName: audiobookshelf-data-pvc
