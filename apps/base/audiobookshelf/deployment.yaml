@@ -14,11 +14,9 @@ spec:
   
     spec:
       securityContext:
-        fsGroup: 1000
         runAsUser: 1000
         runAsGroup: 1000
-        runAsNonRoot: true
-        allowPrivilageEscalation: false
+        allowPrivilegeEscalation: false
       initContainers:
         - name: init-storage
           image: ghcr.io/advplyr/audiobookshelf:latest 
@@ -26,10 +24,12 @@ spec:
             - sh
             - -c
             - |
-              mkdir -p /mnt/audiobooks \
-                       /mnt/podcasts \
-                       /mnt/config \
-                       /mnt/metadata 
+              mkdir -p /mnt/audiobooks /mnt/podcasts /mnt/config /mnt/metadata 
+              chown -R 1000:1000 /mnt
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: true
           volumeMounts:
             - name: audiobookshelf-data
               mountPath: /mnt
@@ -48,7 +48,7 @@ spec:
               subPath: config
             - name: audiobookshelf-data
               mountPath: /metadata
-              subPath: metadta
+              subPath: metadata
           envFrom:
             - configMapRef:
                 name: audiobookshelf-configmap
